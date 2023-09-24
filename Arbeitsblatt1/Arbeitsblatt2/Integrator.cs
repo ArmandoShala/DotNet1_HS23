@@ -29,22 +29,18 @@ namespace DN2
         {
             Steps = steps;
             var interval = (end - start) / Steps;
-            var sum = f(start) + Enumerable.Range(1, Steps - 1)
-                .Aggregate(0.0, (currentValue, i) => currentValue + 2 * f(start + i * interval)) + f(end);
+            var sum = f(start) + Enumerable.Range(1, Steps - 1).Sum(i => 2 * f(start + i * interval)) + f(end);
             // alternative with Enumerable.Range(1, Steps - 1).Aggregate(0.0, (currentValue, i) => currentValue + 2*f(start+i*interval))
-            return sum * interval / 2;
+            return interval * sum / 2;
         }
 
         public static double Integrate(Func<double, double> f, double start, double end, double eps)
         {
             Steps = 1;
-            var isCalc = true;
-            do
+            while (Math.Abs(Integrate(f, start, end, Steps) - Integrate(f, start, end, 2*Steps)) > eps)
             {
-                var integral = Integrate(f, start, end, Steps);
                 Steps *= 2;
-                isCalc = integral - Integrate(f, start, end, Steps) > eps;
-            } while (isCalc);
+            }
             
             return Integrate(f, start, end, Steps);
         }
