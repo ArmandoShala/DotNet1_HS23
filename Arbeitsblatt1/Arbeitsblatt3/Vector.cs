@@ -1,5 +1,4 @@
 using System;
-using NUnit.Framework;
 
 namespace DN3
 {
@@ -14,6 +13,8 @@ namespace DN3
             this.y = y;
             this.z = z;
         }
+        
+        public static implicit operator Vector(double x) => new (x, 0, 0);
 
         public double this[int index]
         {
@@ -101,21 +102,19 @@ namespace DN3
                 scalar * vector.y,
                 scalar * vector.z);
 
-        public static Vector operator *(Vector vector, double scalar) => 
-            new(scalar * vector.x,
-                scalar * vector.y,
-                scalar * vector.z);
+        public static Vector operator *(Vector vector, double scalar) => scalar * vector;
 
         public static Vector operator /(double scalar, Vector vector) => 
             new(scalar / vector.x,
                 scalar / vector.y,
                 scalar / vector.z);
-        public static Vector operator /(Vector vector, double scalar) => 
-            new(scalar / vector.x,
-                scalar / vector.y,
-                scalar / vector.z);
 
-        
+        public static Vector operator /(Vector vector, double scalar) =>
+            new(vector.x / scalar,
+                vector.y / scalar,
+                vector.z / scalar);
+        public static explicit operator double(Vector v) => Math.Sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+
     }
 
     internal class MainClass
