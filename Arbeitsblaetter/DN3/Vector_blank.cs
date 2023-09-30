@@ -1,5 +1,3 @@
-using System;
-
 namespace DN3 {
     public struct Vector_Blank {
         double x,y,z; 
@@ -14,7 +12,7 @@ namespace DN3 {
             return "["+x+" "+y+" "+z+"]";
         }
 
-        public static Vector_Blank operator *(Vector_Blank a, Vector_Blank b) =>
+        public static Vector operator *(Vector a, Vector b) =>
             new (a.y * b.z - a.z * b.y
                 , a.z * b.x - a.x * b.z
                 , a.x * b.y - a.y * b.x);
