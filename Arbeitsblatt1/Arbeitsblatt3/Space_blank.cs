@@ -4,8 +4,8 @@ using System.Text;
 
 namespace DN3 {
     public class Space {
-        
-        static void Main(string[] args) {
+        /*
+        static void Main_Blank(string[] args) {
             Vector omegaEarth,omegaSun, omegaGalaxy;
             Vector rEarth, rSun, rGalaxy;
             
@@ -29,5 +29,6 @@ namespace DN3 {
         public static double CalcSpeed(Vector omegaEarth,Vector omegaSun, Vector omegaGalaxy,Vector rEarth, Vector rSun, Vector rGalaxy) {
             // TODO Implement     
         }
+        */
     }
 }

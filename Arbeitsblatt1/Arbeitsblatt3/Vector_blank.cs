@@ -1,16 +1,16 @@
 using System;
 
 namespace DN3 {
-    public struct Vector {
-        double x,y,z;
-
+    public struct Vector_Blank {
+        double x,y,z; 
+        /*
         //Konstruktor
         public Vector(double x, double y, double z){
             this.x=x;
             this.y=y;
             this.z=z;
         }
-        
+
         public override string ToString(){
             return "["+x+" "+y+" "+z+"]";
         }
@@ -29,8 +29,9 @@ namespace DN3 {
           Console.WriteLine(c);
         }
 
-        public static void Main(string[] args) {
+        public static void Main_Blank(string[] args) {
            Test();
         }
+        */
     }
 }

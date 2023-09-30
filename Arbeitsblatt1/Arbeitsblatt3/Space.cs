@@ -3,7 +3,8 @@ using System;
 namespace Arbeitsblatt3 {
     public class Space {
         
-        static void Main(string[] args) {
+        /*
+        static void Main2(string[] args) {
             DN3.Vector omegaEarth,omegaSun, omegaGalaxy;
             DN3.Vector rEarth, rSun, rGalaxy;
             
@@ -28,5 +29,6 @@ namespace Arbeitsblatt3 {
         public static double CalcSpeed(DN3.Vector omegaEarth,DN3.Vector omegaSun, DN3.Vector omegaGalaxy,DN3.Vector rEarth, DN3.Vector rSun, DN3.Vector rGalaxy) {
             // TODO Implement     
         }
+        */
     }
 }
