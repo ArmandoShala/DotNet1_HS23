@@ -1,8 +1,5 @@
-using System;
-using Arbeitsblatt2;
-
 namespace DN2 {
-    class MainClass {
+    class MainClass_Blank {
         const int STEPS = 100;
         const double EPS = 1E-5;
     
@@ -16,7 +13,7 @@ namespace DN2 {
         }
     }
   
-    public class Integrator_ {
+    public class Integrator_Blank_ {
         public static int Steps;
 
         public static double Integrate(Func<double, double> f, double start, double end, int steps) {

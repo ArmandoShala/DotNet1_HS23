@@ -9,9 +9,9 @@ using System.Linq;
 /// </summary>
 
 namespace DN1 {
-    public enum PrimeType {Prime, NotPrime};
+    public enum PrimeType_Blank {Prime, NotPrime};
 
-    public class Eratosthenes  {
+    public class Eratosthenes_Blank  {
         
         public PrimeType[] Sieve(int maxPrime) {
            // TODO Implement
@@ -42,7 +42,7 @@ namespace DN1 {
             Console.WriteLine();
         }
         
-        static void Main(string[] args) {
+        static void Main_Blank(string[] args) {
             int maxPrime = 100;
             Eratosthenes eratosthenes = new Eratosthenes();
             if (args.Length >= 1)
