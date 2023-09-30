@@ -17,16 +17,19 @@ namespace DN3 {
         
         public static void InitOmegaVectors(out Vector omegaEarth, out Vector omegaSun, out Vector omegaGalaxy) {
             Vector unitVector = new Vector(0, 1, 0);
-            // TODO Implement       
+            // TODO Implement
+            throw new NotImplementedException();
         }
         
         public static void InitRVectors(out Vector rEarth, out Vector rSun, out Vector rGalaxy) {
             Vector unitVector = new Vector(1, 0, 0);
             // TODO Implement     
+            throw new NotImplementedException();
         }
 
         public static double CalcSpeed(Vector omegaEarth,Vector omegaSun, Vector omegaGalaxy,Vector rEarth, Vector rSun, Vector rGalaxy) {
             // TODO Implement     
+            throw new NotImplementedException();
         }
     }
 }
