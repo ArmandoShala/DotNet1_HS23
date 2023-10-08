@@ -2,16 +2,20 @@ namespace DN3;
 
 public struct Vector
 {
-    double x, y, z;
+    private double _x, _y, _z;
 
     //Konstruktor
     public Vector(double x, double y = 0.0, double z = 0.0)
     {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        this._x = x;
+        this._y = y;
+        this._z = z;
     }
-        
+    
+    public double Magnitude => Math.Sqrt(_x * _x + _y * _y + _z * _z);
+
+    public Vector Normalize() => new(_x / Magnitude, _y / Magnitude, _z / Magnitude);
+
     public static implicit operator Vector(double x) => new (x, 0, 0);
 
     public double this[int index]
@@ -20,9 +24,9 @@ public struct Vector
         {
             return index switch
             {
-                0 => x,
-                1 => y,
-                2 => z,
+                0 => _x,
+                1 => _y,
+                2 => _z,
                 _ => throw new ArgumentOutOfRangeException(nameof(index), "Nur [0, 2] möglich"),
             };
 
@@ -31,9 +35,9 @@ public struct Vector
         {
             _ = index switch
             {
-                0 => x = value,
-                1 => y = value,
-                2 => z = value,
+                0 => _x = value,
+                1 => _y = value,
+                2 => _z = value,
                 _ => throw new ArgumentOutOfRangeException(nameof(index), "Nur [0, 2] möglich"),
             };
         }
@@ -41,7 +45,7 @@ public struct Vector
 
     public override string ToString()
     {
-        return $"[{x:N1} {y:N1} {z:N1}]";
+        return $"[{_x:N1} {_y:N1} {_z:N1}]";
     }
 
     public override bool Equals(object? obj)
@@ -49,9 +53,9 @@ public struct Vector
         if (obj is not Vector vectorToCheck)
             return false;
 
-        return NearlyEqual(x, vectorToCheck.x)
-               && NearlyEqual(y, vectorToCheck.y)
-               && NearlyEqual(z, vectorToCheck.z);
+        return NearlyEqual(_x, vectorToCheck._x)
+               && NearlyEqual(_y, vectorToCheck._y)
+               && NearlyEqual(_z, vectorToCheck._z);
     }
 
     private static bool NearlyEqual(double a, double b)
@@ -78,40 +82,40 @@ public struct Vector
         return diff / (absA + absB) < epsilon;
     }
 
-    public override int GetHashCode() => HashCode.Combine(x, y, z);
+    public override int GetHashCode() => HashCode.Combine(_x, _y, _z);
 
     public static Vector operator +(Vector a, Vector b) =>
-        new(a.x + b.x,
-            a.y + b.y,
-            a.z + b.z);
+        new(a._x + b._x,
+            a._y + b._y,
+            a._z + b._z);
 
     public static Vector operator -(Vector a, Vector b) =>
-        new(a.x - b.x,
-            a.y - b.y,
-            a.z - b.z);
+        new(a._x - b._x,
+            a._y - b._y,
+            a._z - b._z);
 
     public static Vector operator *(Vector a, Vector b) =>
-        new(a.y * b.z - a.z * b.y,
-            a.z * b.x - a.x * b.z,
-            a.x * b.y - a.y * b.x);
+        new(a._y * b._z - a._z * b._y,
+            a._z * b._x - a._x * b._z,
+            a._x * b._y - a._y * b._x);
         
     public static Vector operator *(double scalar, Vector vector) =>
-        new(scalar * vector.x,
-            scalar * vector.y,
-            scalar * vector.z);
+        new(scalar * vector._x,
+            scalar * vector._y,
+            scalar * vector._z);
 
     public static Vector operator *(Vector vector, double scalar) => scalar * vector;
 
     public static Vector operator /(double scalar, Vector vector) => 
-        new(scalar / vector.x,
-            scalar / vector.y,
-            scalar / vector.z);
+        new(scalar / vector._x,
+            scalar / vector._y,
+            scalar / vector._z);
 
     public static Vector operator /(Vector vector, double scalar) =>
-        new(vector.x / scalar,
-            vector.y / scalar,
-            vector.z / scalar);
-    public static explicit operator double(Vector v) => Math.Sqrt(v.x * v.x + v.y * v.y + v.z * v.z);
+        new(vector._x / scalar,
+            vector._y / scalar,
+            vector._z / scalar);
+    public static explicit operator double(Vector v) => Math.Sqrt(v._x * v._x + v._y * v._y + v._z * v._z);
 
 }
 
