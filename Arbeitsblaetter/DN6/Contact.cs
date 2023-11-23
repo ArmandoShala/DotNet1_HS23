@@ -23,14 +23,20 @@ namespace DN6 {
             Departement = dep;
         }
 
-        public override String ToString() {
-            return $"{Name};{Kurz};{Standort};{Kategorie};{EMail};{Tel};{Departement};";
-        }
-        
+        public override String ToString() => $"{Name};{Kurz};{Standort};{Kategorie};{EMail};{Tel};{Departement};";
+
         public String ToVcf()
-        {
-            return null;
-        }
+        =>
+            $@"BEGIN:VCARD
+            VERSION:3.0
+            N:{Name}
+            FN:{Name}
+            ORG:{Departement}
+            ADR;WORK:{Standort}
+            TEL;WORK;VOICE:{Tel}
+            EMAIL;INTERNET:{EMail}
+            END:VCARD";
+        
 
         public IEnumerator<String> GetEnumerator() {
             yield return Name;
@@ -42,8 +48,6 @@ namespace DN6 {
             yield return Departement;
         }
 
-        public int CompareTo(Contact other) {
-            return String.Compare(Name, other.Name, StringComparison.Ordinal);
-        }
+        public int CompareTo(Contact other) => String.Compare(Name, other.Name, StringComparison.Ordinal);
     }
 }
