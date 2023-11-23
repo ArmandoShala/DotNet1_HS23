@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 
 namespace DN6 {
-    public class Contact0_Blank /* TODO Implement */ {
+    public class Contact_Blank /* TODO Implement */ {
         public String Name {get;set;}
         public String Kurz {get;set;}
         public String Standort{get;set;}
@@ -27,11 +27,11 @@ namespace DN6 {
             // TODO Implement
         }
 
-        public Contact0_Blank(string name, string kurz, string standort, string kategorie, string eMail, string tel, string dep)  {
+        public Contact_Blank(string name, string kurz, string standort, string kategorie, string eMail, string tel, string dep)  {
             // TODO Implement
         }
 
-        public int CompareTo(Contact0_Blank other) {
+        public int CompareTo(Contact other) {
             // TODO Implement
         }
 
