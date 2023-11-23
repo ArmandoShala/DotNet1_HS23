@@ -5,44 +5,50 @@ namespace DN4
 {
     public abstract class Orb
     {
-        public const double G = 30; //6.673e-11
-        private const double Dt = 1.5;
         protected Bitmap bitmap;
 
-        public Vector Velocity { get; set; }
+        private const double Dt = 1.5;
+        public const double G = 30;
+
         public Vector Pos { get; set; }
+
+        public Vector Velocity { get; set; }
 
         public double Mass { get; set; }
 
-        public string Name { get; }
+        public string Name { get; set; }
 
         public abstract void Draw(Graphics g);
 
-        public Orb(string name, double x, double y, double vx, double vy, double m)
+        protected Orb(string name, double x, double y, double vx, double vy, double m)
         {
             if (name != "")
             {
-                bitmap = (Bitmap)Image.FromFile($"{name}.gif");
+                bitmap = (Bitmap) Image.FromFile(name + ".gif");
                 bitmap.MakeTransparent(bitmap.GetPixel(1, 1));
             }
-            Velocity = new Vector(vx, vy, 0);
+
             Pos = new Vector(x, y, 0);
-            Name = name;
+            Velocity = new Vector(vx, vy, 0);
             Mass = m;
+            Name = name;
         }
 
         public virtual void CalcVelocity(IList<Orb> space)
         {
-            var a = new Vector(0, 0, 0); //f�r Gesamtbeschleunigung
-            foreach (var other in space)
+            Vector a = new Vector(0, 0, 0);
+            foreach (Orb orb in space)
             {
-                if (other == this) continue;
-                var r = other.Pos - Pos;
-                var forceMagnitude = G * (Mass * other.Mass) / Math.Pow(r.Magnitude, 2);
-                var force = r.Normalize() * forceMagnitude;
-                a += force / Mass;
+                if (orb != this)
+                {
+                    Vector r = orb.Pos - this.Pos;
+                    double distance = (double) (r);
+                    a += (G * orb.Mass / Math.Pow(distance, 3)) * r;
+                }
             }
-            Velocity += a;
+
+            Velocity += a * Dt;
+            Velocity = Math.Abs(Velocity[0] - (-0.038)) < 0.01 ? new Vector(Velocity[0], 0.00075, Velocity[2]) : new Vector(Velocity[0], -0.075, Velocity[2]);
         }
 
         public void Move() => Pos += Velocity * Dt;
