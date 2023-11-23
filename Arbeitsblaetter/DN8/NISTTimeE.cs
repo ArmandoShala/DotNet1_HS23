@@ -14,9 +14,38 @@ using System.Text;
 
 public class NISTTime
 {
+	
+	public struct SystemTiem // win32 struct
+	{
+		public short wYear;
+		public short wMonth;
+		public short wDayOfWeek;
+		public short wDay;
+		public short wHour;
+		public short wMinute;
+		public short wSecond;
+		public short wMilliseconds;
+	};
+	
+	[DllImport("Kernel32.dll")]
+	static extern unsafe bool SetSystemTime(SystemTime* lpSystemTime);
 
 	public static void SetTime(DateTime localtime) {
-      //TODO: implement SetTime
+		SystemTiem systemTime = new SystemTiem();
+
+		systemTime.wYear = (short)localtime.Year;
+		systemTime.wMonth = (short)localtime.Month;
+		systemTime.wDayOfWeek = (short)localtime.DayOfWeek;
+		systemTime.wDay = (short)localtime.Day;
+		systemTime.wHour = (short)localtime.Hour;
+		systemTime.wMinute = (short)localtime.Minute;
+		systemTime.wSecond = (short)localtime.Second;
+		systemTime.wMilliseconds = (short)localtime.Millisecond;
+                
+		unsafe
+		{
+			Console.WriteLine($"-------{SetSystemTime(&systemTime)}");
+		}
 	}
 	
 	public static DateTime GetUniversalTime()
