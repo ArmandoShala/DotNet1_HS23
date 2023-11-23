@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -7,7 +7,7 @@ using System.Text;
 using System.IO;
 
 namespace DN6 {
-    public class Contacts_blank : List<Contact>  {
+    public class Contacts : List<Contact>  {
 
         public void readCsv(string file){
             String[] lines = File.ReadAllLines(file);
@@ -26,7 +26,7 @@ namespace DN6 {
         }
 
         public void writeVcf(Contact c)  {
-        	File.WriteAllText(c.Name + ".vcf", c.ToVcf());
+            File.WriteAllText(c.Name + ".vcf", c.ToVcf());
         }
 
 
