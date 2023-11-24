@@ -1,6 +1,6 @@
 using System.Drawing;
 
-namespace DN4
+namespace DN5
 {
     public class Planet : Orb
     {

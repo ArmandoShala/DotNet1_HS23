@@ -1,58 +1,63 @@
-using System.Drawing;
 using DN3;
+namespace DN5;
 
-namespace DN4
+internal delegate void CollisionHandler(Orb o1);
+
+public abstract class Orb
 {
-    public abstract class Orb
+    public event CollisionHandler Collision;
+
+    public bool IsDead { get; private set; }
+
+    private const double G = 30; //6.673e-11
+    private const double COLLISION_DISTANCE = 15.0;
+
+    protected Bitmap bitmap;
+    protected Vector posNew;
+    protected Vector v0;
+    protected string name;
+
+    public Vector Pos { get; protected set; }
+
+    public double Mass { get; }
+
+
+    public abstract void Draw(Graphics g);
+
+    public void Move() => Pos = posNew;
+
+    public Orb(string name, double x, double y, double vx, double vy, double m)
     {
-        protected Bitmap bitmap;
-
-        private const double Dt = 1.5;
-        public const double G = 30;
-
-        public Vector Pos { get; set; }
-
-        public Vector Velocity { get; set; }
-
-        public double Mass { get; set; }
-
-        public string Name { get; set; }
-
-        public abstract void Draw(Graphics g);
-
-        protected Orb(string name, double x, double y, double vx, double vy, double m)
-        {
-            if (name != "")
-            {
-                bitmap = (Bitmap) Image.FromFile(name + ".gif");
-                bitmap.MakeTransparent(bitmap.GetPixel(1, 1));
-            }
-
-            Pos = new Vector(x, y, 0);
-            Velocity = new Vector(vx, vy, 0);
-            Mass = m;
-            Name = name;
-        }
-
-        public virtual void CalcVelocity(IList<Orb> space)
-        {
-            Vector a = new Vector(0, 0, 0);
-            foreach (Orb orb in space)
-            {
-                if (orb != this)
-                {
-                    Vector r = orb.Pos - this.Pos;
-                    double distance = (double) (r);
-                    a += (G * orb.Mass / Math.Pow(distance, 3)) * r;
-                }
-            }
-
-            Velocity += a * Dt;
-            Velocity = Math.Abs(Velocity[0] - (-0.038)) < 0.01 ? new Vector(Velocity[0], 0.00075, Velocity[2]) : new Vector(Velocity[0], -0.075, Velocity[2]);
-        }
-
-        public void Move() => Pos += Velocity * Dt;
-
-        public override string ToString() => Name;
+        bitmap = (Bitmap) Resources.ResourceManager.GetObject(name);
+        bitmap.MakeTransparent(bitmap.GetPixel(1, 1));
+        Pos = new Vector(x, y, 0);
+        v0 = new Vector(vx, vy, 0);
+        Mass = m;
+        this.name = name;
     }
+
+    public virtual void CalcPosNew(IList<Orb> space)
+    {
+        if (IsDead) return;
+        var a = new Vector(0, 0, 0);
+        foreach (var o in space)
+        {
+            if (o == this || o.IsDead) continue;
+            var distance = o.Pos - Pos;
+            var r = (double) distance;
+
+            if (r < COLLISION_DISTANCE)
+            {
+                Collision?.Invoke(this);
+            }
+
+            a += (G * o.Mass / (r * r * r)) * distance;
+        }
+
+        const double t = 3d;
+        posNew = Pos + v0 * t + t * t * a;
+        v0 += t * a;
+    }
+
+    public override string ToString() => name;
 }
