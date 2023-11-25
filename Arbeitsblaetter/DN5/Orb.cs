@@ -1,12 +1,11 @@
 using System.Runtime.InteropServices;
+using System.Drawing.Common;
 using DN3;
-using DN4;
+namespace DN4;
 
-namespace DN5;
+delegate void OrbDeleteHandler(Orb o1);
 
-public delegate void OrbDeleteHandler(Orb o1);
-
-public abstract class Orb
+abstract class Orb
 {
     const double G = 30; //6.673e-11
 
@@ -23,10 +22,16 @@ public abstract class Orb
 
     public Vector Velocity => v0;
 
-    public double Mass => masse;
+    public double Mass
+    {
+        get { return masse; }
+    }
     public abstract void Draw(Graphics g);
 
-    public void Move() => pos = posNew;
+    public void Move()
+    {
+        pos = posNew;
+    }
 
     public Orb(string name, double x, double y, double vx, double vy, double m)//, Func<> )
     {
@@ -46,7 +51,9 @@ public abstract class Orb
         {
             framecounter--;
             if (framecounter == 0)
+            {
                 Deleter(this);
+            }
         }
         else
         {
@@ -66,9 +73,10 @@ public abstract class Orb
                 a += G * orb.Mass * direction / Math.Pow(direction.Norm(), 3);
             }
 
-            var t = 3;
-            posNew = pos + v0 * t + (t * t) * a;
-            v0 = v0 + t * a;
+            //neue Position berechnen
+            double t = 3;
+            posNew = pos + v0*t + (t*t)*a;
+            v0 = v0 + t*a;
         }
     }
 
@@ -85,5 +93,11 @@ public abstract class Orb
     [DllImport("winmm.dll")]
     public static extern long PlaySound(String lpszName, IntPtr hModule, Int32 dwFlags);
 
-    public override string ToString() => name;
+    public override string ToString()
+    {
+        return name;
+    }
+
+
+
 }
