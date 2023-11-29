@@ -7,7 +7,7 @@ namespace DN9;
 
 public partial class Forms1 : Form
 {
-    private const string Path = @"C:\Users\Karin\Documents\Studium\Semester 7\DNET1\p09\app2020.accdb";
+    private const string Path = @"C:\Users\Armando\ZHAW\Semester 7\DNET1\p09\app2020.accdb";
     private const string strConnection = "Provider=Microsoft.ACE.OLEDB.12.0; Data Source=" + Path;
 
     public Forms1()
