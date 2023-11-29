@@ -1,103 +1,65 @@
-using System.Runtime.InteropServices;
-using System.Drawing.Common;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 using DN3;
-namespace DN4;
 
-delegate void OrbDeleteHandler(Orb o1);
+namespace DN4 {
 
-abstract class Orb
-{
-    const double G = 30; //6.673e-11
+    public delegate void CollisionHandler(Orb o1);
 
-    protected Bitmap bitmap;
-    protected Vector posNew, pos;
-    protected Vector v0;
-    protected string name;
-    protected double masse;
-    protected int framecounter = -1;
+    public abstract class Orb {
 
-    public event OrbDeleteHandler Deleter;
+        public event CollisionHandler Collision;
+        const double CollisionDistance = 15;
+        private const double Dt = 1.5;
 
-    public Vector Pos => pos;
+        public const double G = 30; //6.673e-11
 
-    public Vector Velocity => v0;
 
-    public double Mass
-    {
-        get { return masse; }
-    }
-    public abstract void Draw(Graphics g);
+        protected Bitmap bitmap;
 
-    public void Move()
-    {
-        pos = posNew;
-    }
+        public Vector Pos { get; set; }
 
-    public Orb(string name, double x, double y, double vx, double vy, double m)//, Func<> )
-    {
-        bitmap = new Bitmap(name + ".gif");
-        bitmap.MakeTransparent(bitmap.GetPixel(1, 1));
-        pos = new Vector(x, y, 0);
-        v0 = new Vector(vx, vy, 0);
-        masse = m;
-        this.name = name;
-    }
+        public Vector Velocity { get; set; }
 
-    public virtual void CalcPosNew(IList<Orb> space)
-    {
-        var a = new Vector();
+        public double Mass { get; set; }
 
-        if (framecounter >= 0)
-        {
-            framecounter--;
-            if (framecounter == 0)
-            {
-                Deleter(this);
-            }
+        public string Name { get; set; }
+
+        public abstract void Draw(Graphics g);
+
+        public Orb(string name, double x, double y, double vx, double vy, double m) {
+            Pos = new Vector(x, y, 0);
+            Velocity = new Vector(vx, vy, 0);
+            Mass = m;
+            Name = name;
         }
-        else
-        {
-            foreach (var orb in space)
-            {
-                if (orb.Equals(this))
-                    continue;
-                var direction = orb.Pos - Pos;
 
-                if (direction.Norm() <= 30)
-                {
-                    var list = this.GetType().GetCustomAttributes(typeof(ExplodableAttribute), true);
-                    if (list.Length > 0)
-                        explode();
+        public virtual void CalcVelocity(IList<Orb> space) {
+            var initV = new Vector(0, 0, 0);
+
+            foreach (Orb otherOrb in space)
+            {
+                if (otherOrb == this) continue;
+                var direction = otherOrb.Pos - this.Pos;
+                var distance = (double)direction;
+
+                if (distance < CollisionDistance) {
+                    Collision?.Invoke(this.Mass < otherOrb.Mass ? this : otherOrb);
                 }
 
-                a += G * orb.Mass * direction / Math.Pow(direction.Norm(), 3);
+                var forceMagnitude = (G * this.Mass * otherOrb.Mass) / (distance * distance);
+
+                var forceDirection = direction / distance; // Normalize the direction vector
+                var acceleration = forceDirection * (forceMagnitude / this.Mass);
+                initV += acceleration;
             }
 
-            //neue Position berechnen
-            double t = 3;
-            posNew = pos + v0*t + (t*t)*a;
-            v0 = v0 + t*a;
+            Velocity += initV;
         }
+
+        public void Move() => Pos += Velocity * Dt;
+
+        public override string ToString() => Name;
     }
-
-    private void explode()
-    {
-        bitmap = new Bitmap("explosion.gif");
-        bitmap.MakeTransparent(bitmap.GetPixel(1, 1));
-        v0 /= 3;
-        masse = 0;
-        framecounter = 10;
-        PlaySound("explosion.wav", (IntPtr)0, 1);
-    }
-
-    [DllImport("winmm.dll")]
-    public static extern long PlaySound(String lpszName, IntPtr hModule, Int32 dwFlags);
-
-    public override string ToString()
-    {
-        return name;
-    }
-
-
-
 }
